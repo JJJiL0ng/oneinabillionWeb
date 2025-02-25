@@ -70,7 +70,6 @@ export default function Home() {
     return (
       <div className="container mx-auto py-10">
         <h2 className="text-center text-2xl mb-8">한 발짝 더 가까이</h2>
-        <ProgressBar current={currentStep} total={totalSteps} />
         <p className="text-center mb-6">
           매칭을 위해 SNS 계정을 입력해주세요. <br />
           매칭 결과는 입력하신 계정으로 바로 DM을 보내드립니다.
