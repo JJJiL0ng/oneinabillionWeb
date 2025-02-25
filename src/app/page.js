@@ -27,8 +27,11 @@ export default function Home() {
     
     // 선택 저장
     const newSelections = [...selections];
-    newSelections[questionIndex] = choice; // 직접 선택값 저장
+    newSelections[questionIndex] = choice;
     setSelections(newSelections);
+    
+    // 로컬 스토리지에 선택 데이터 저장
+    localStorage.setItem('userChoices', JSON.stringify(newSelections));
     
     // 디버깅을 위한 로그
     console.log('저장된 선택:', newSelections);
@@ -42,10 +45,23 @@ export default function Home() {
     }
   };
   
-  const handleSocialSubmit = (socialData) => {
-    // Firebase로 데이터 저장 및 매칭 로직 호출
-    // 여기서는 성공 메시지만 표시
-    setIsCompleted(true);
+  const handleSocialSubmit = async (socialData) => {
+    try {
+      const savedChoices = JSON.parse(localStorage.getItem('userChoices'));
+      if (!savedChoices || !Array.isArray(savedChoices) || savedChoices.length === 0) {
+        throw new Error('선택 데이터가 없습니다');
+      }
+      
+      // Firebase로 데이터 저장
+      await saveUserSelections(savedChoices, socialData);
+      
+      // 성공 시 로컬 스토리지 클리어 및 완료 상태 설정
+      localStorage.removeItem('userChoices');
+      setIsCompleted(true);
+    } catch (error) {
+      console.error('제출 오류:', error);
+      // 에러 처리 로직 추가
+    }
   };
   
   // 성능 최적화: 이미지 사전 로딩
