@@ -3,6 +3,7 @@
 
 import { createContext, useContext, useState, useEffect } from 'react';
 import { getQuestions } from '../lib/questions';
+import { saveUserSelections } from '../firebase/db';
 
 // Context 생성
 const ChoiceContext = createContext();
@@ -67,14 +68,17 @@ export function ChoiceProvider({ children }) {
       // 소셜 정보 저장
       setSocialInfo(data);
       
-      // 여기서 Firebase에 데이터 저장 로직이 구현될 수 있음
-      // 예: await saveUserSelections(selections, data);
+      // Firebase에 데이터 저장
+      const userId = await saveUserSelections(selections, data);
       
       // 제출 완료 상태로 변경
       setIsCompleted(true);
+      
+      return userId;  // 필요한 경우 사용할 수 있도록 userId 반환
     } catch (err) {
       console.error('소셜 정보 제출 오류:', err);
       setError('제출 중 오류가 발생했습니다. 다시 시도해주세요.');
+      throw err;  // 에러를 상위로 전파
     } finally {
       setIsLoading(false);
     }
