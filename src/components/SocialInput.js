@@ -28,21 +28,34 @@ export default function SocialInput() {
     setError('');
     
     try {
+      // 로컬 스토리지에서 선택 데이터 가져오기
+      const savedChoices = JSON.parse(localStorage.getItem('userChoices'));
+      
+      if (!savedChoices || !Array.isArray(savedChoices) || savedChoices.length === 0) {
+        throw new Error('선택 데이터가 없습니다');
+      }
+
       // 제출 데이터 준비
       const socialData = {
         platform,
         handle: handle.trim()
       };
       
-      console.log('소셜 데이터 제출:', socialData); // 디버깅 로그 추가
+      console.log('저장할 데이터:', {
+        selections: savedChoices,
+        socialInfo: socialData
+      });
       
-      // ChoiceContext를 통해 Firebase에 저장
-      await submitSocialInfo(socialData);
+      // saveUserSelections 함수를 직접 호출
+      await saveUserSelections(savedChoices, socialData);
       
-      console.log('데이터 저장 성공'); // 성공 로그
+      // 성공 시 로컬 스토리지 클리어
+      localStorage.removeItem('userChoices');
+      console.log('데이터 저장 성공');
+      
     } catch (err) {
       console.error('제출 오류:', err);
-      setError('제출 중 오류가 발생했습니다. 다시 시도해주세요.');
+      setError(err.message || '제출 중 오류가 발생했습니다. 다시 시도해주세요.');
     }
   };
   

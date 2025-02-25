@@ -35,13 +35,13 @@ import {
         socialInfo
       });
 
-      // 데이터 유효성 검사 추가
-      if (!Array.isArray(selections) || selections.length === 0) {
-        throw new Error('유효하지 않은 선택 데이터');
+      // 데이터 유효성 검사 강화
+      if (!selections || !Array.isArray(selections) || selections.length === 0) {
+        throw new Error('선택 데이터가 없습니다');
       }
 
       if (!socialInfo || !socialInfo.handle || !socialInfo.platform) {
-        throw new Error('유효하지 않은 소셜 정보');
+        throw new Error('소셜 정보가 유효하지 않습니다');
       }
 
       // 사용자 데이터 객체 생성
@@ -50,8 +50,10 @@ import {
         socialHandle: socialInfo.handle,
         platform: socialInfo.platform,
         timestamp: serverTimestamp(),
+        createdAt: new Date().toISOString(),
         // 추가 디버깅 정보
-        createdAt: new Date().toISOString()
+        dataVersion: '1.0',
+        choicesCount: selections.length
       };
 
       // Firestore에 문서 추가
