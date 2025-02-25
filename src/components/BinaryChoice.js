@@ -14,9 +14,10 @@ import ChoiceButton from './ChoiceButton';
 export default function BinaryChoice({ question, onSelect, questionNumber }) {
   const [selectedChoice, setSelectedChoice] = useState(null);
   
-  // 선택 처리 함수
   const handleSelection = (choice) => {
-    // 선택값이 'left' 또는 'right'인지 확실히 검증
+    console.log('BinaryChoice handleSelection:', { choice, questionNumber }); // 디버깅 로그
+    
+    // 선택값 검증
     if (choice !== 'left' && choice !== 'right') {
       console.error('잘못된 선택값:', choice);
       return;
@@ -24,10 +25,9 @@ export default function BinaryChoice({ question, onSelect, questionNumber }) {
 
     setSelectedChoice(choice);
     
-    // 약간의 지연 후 선택 결과를 부모 컴포넌트에 전달
+    // 부모 컴포넌트에 선택값 직접 전달
     setTimeout(() => {
-      // 선택값을 명확하게 전달
-      onSelect(questionNumber - 1, choice); // questionNumber는 1부터 시작하므로 인덱스로 변환
+      onSelect(questionNumber - 1, choice);
       setSelectedChoice(null);
     }, 300);
   };
@@ -46,7 +46,7 @@ export default function BinaryChoice({ question, onSelect, questionNumber }) {
           image={question.leftImage}
           value="left"
           isSelected={selectedChoice === 'left'}
-          onClick={() => handleSelection('left')}
+          onClick={() => handleSelection('left')}  // 직접 'left' 전달
           alt={question.leftText || '왼쪽 선택'}
         />
         
@@ -54,7 +54,7 @@ export default function BinaryChoice({ question, onSelect, questionNumber }) {
           image={question.rightImage}
           value="right"
           isSelected={selectedChoice === 'right'}
-          onClick={() => handleSelection('right')}
+          onClick={() => handleSelection('right')}  // 직접 'right' 전달
           alt={question.rightText || '오른쪽 선택'}
         />
       </div>
