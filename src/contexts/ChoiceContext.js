@@ -95,18 +95,18 @@ export function ChoiceProvider({ children }) {
     setError(null);
   };
 
-  // 선택 데이터 변경 시 로컬 스토리지에 저장 (선택적)
+  // 선택 데이터 변경 시 로컬 스토리지에 저장
   useEffect(() => {
     if (selections.length > 0) {
       localStorage.setItem('one-in-billion-selections', JSON.stringify(selections));
     }
   }, [selections]);
 
-  // 초기 로드 시 로컬 스토리지에서 데이터 복원 (선택적)
+  // 초기 로드 시 로컬 스토리지에서 데이터 복원
   useEffect(() => {
-    try {
-      const savedSelections = localStorage.getItem('one-in-billion-selections');
-      if (savedSelections) {
+    const savedSelections = localStorage.getItem('one-in-billion-selections');
+    if (savedSelections && selections.length === 0) {
+      try {
         const parsedSelections = JSON.parse(savedSelections);
         setSelections(parsedSelections);
         
@@ -116,13 +116,12 @@ export function ChoiceProvider({ children }) {
         } else {
           setCurrentStep(totalSteps);
         }
+      } catch (err) {
+        console.error('저장된 선택 복원 오류:', err);
+        localStorage.removeItem('one-in-billion-selections');
       }
-    } catch (err) {
-      console.error('저장된 선택 복원 오류:', err);
-      // 오류 발생 시 초기화
-      localStorage.removeItem('one-in-billion-selections');
     }
-  }, [totalSteps]);
+  }, []); // 컴포넌트 마운트 시 한 번만 실행
 
   // Context에 제공할 값들
   const value = {
