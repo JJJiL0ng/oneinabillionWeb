@@ -16,12 +16,19 @@ export default function BinaryChoice({ question, onSelect, questionNumber }) {
   
   // 선택 처리 함수
   const handleSelection = (choice) => {
+    // 선택값이 'left' 또는 'right'인지 확실히 검증
+    if (choice !== 'left' && choice !== 'right') {
+      console.error('잘못된 선택값:', choice);
+      return;
+    }
+
     setSelectedChoice(choice);
     
-    // 약간의 지연 후 선택 결과를 부모 컴포넌트에 전달 (시각적 피드백 위함)
+    // 약간의 지연 후 선택 결과를 부모 컴포넌트에 전달
     setTimeout(() => {
-      onSelect(choice);
-      setSelectedChoice(null); // 선택 상태 초기화
+      // 선택값을 명확하게 전달
+      onSelect(questionNumber - 1, choice); // questionNumber는 1부터 시작하므로 인덱스로 변환
+      setSelectedChoice(null);
     }, 300);
   };
 

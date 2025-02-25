@@ -41,9 +41,15 @@ export function ChoiceProvider({ children }) {
    * @param {String} choice - 선택 값 ('left' 또는 'right')
    */
   const handleSelection = (questionIndex, choice) => {
+    // 선택값 검증
+    if (choice !== 'left' && choice !== 'right') {
+      console.error('잘못된 선택값:', choice);
+      return;
+    }
+
     // 기존 선택 배열 복사
     const newSelections = [...selections];
-    // 해당 인덱스에 선택 저장
+    // 해당 인덱스에 선택 저장 (선택값을 명확하게 저장)
     newSelections[questionIndex] = choice;
     setSelections(newSelections);
     
@@ -51,7 +57,6 @@ export function ChoiceProvider({ children }) {
     if (questionIndex < totalSteps - 1) {
       setCurrentStep(questionIndex + 1);
     } else {
-      // 마지막 질문까지 완료, 소셜 입력 단계로 이동
       setCurrentStep(totalSteps);
     }
   };
