@@ -2,16 +2,17 @@
 'use client';
 
 import { useState } from 'react';
+import { useChoiceContext } from '../contexts/ChoiceContext';
 
 /**
  * SNS 계정 입력 폼 컴포넌트
- * 
- * @param {Function} onSubmit - 제출 처리 콜백 함수
  */
-export default function SocialInput({ onSubmit }) {
+export default function SocialInput() {
+  // ChoiceContext에서 필요한 값들을 가져옴
+  const { submitSocialInfo, isLoading: contextLoading, error: contextError } = useChoiceContext();
+  
   const [platform, setPlatform] = useState('instagram');
   const [handle, setHandle] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   
   // 폼 제출 처리
@@ -24,7 +25,6 @@ export default function SocialInput({ onSubmit }) {
       return;
     }
     
-    setIsLoading(true);
     setError('');
     
     try {
@@ -34,13 +34,11 @@ export default function SocialInput({ onSubmit }) {
         handle: handle.trim()
       };
       
-      // 부모 컴포넌트에 데이터 전달
-      await onSubmit(socialData);
+      // ChoiceContext를 통해 Firebase에 저장
+      await submitSocialInfo(socialData);
     } catch (err) {
       console.error('제출 오류:', err);
       setError('제출 중 오류가 발생했습니다. 다시 시도해주세요.');
-    } finally {
-      setIsLoading(false);
     }
   };
   
@@ -80,19 +78,21 @@ export default function SocialInput({ onSubmit }) {
             placeholder={`@를 제외한 ${platform} 아이디를 입력하세요`}
             value={handle}
             onChange={(e) => setHandle(e.target.value)}
-            disabled={isLoading}
+            disabled={contextLoading}
           />
         </div>
-        {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+        {(error || contextError) && (
+          <p className="text-red-500 text-sm mt-1">{error || contextError}</p>
+        )}
       </div>
       
       {/* 제출 버튼 */}
       <button
         type="submit"
         className="btn btn-primary w-full"
-        disabled={isLoading}
+        disabled={contextLoading}
       >
-        {isLoading ? '처리 중...' : '매칭 시작하기'}
+        {contextLoading ? '처리 중...' : '매칭 시작하기'}
       </button>
       
       {/* 개인정보 안내 */}
