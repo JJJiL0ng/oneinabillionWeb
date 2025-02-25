@@ -17,10 +17,21 @@ export default function Home() {
   const totalSteps = questions.length;
   
   const handleSelection = (questionIndex, choice) => {
+    console.log('Home handleSelection:', { questionIndex, choice }); // 디버깅 로그
+    
+    // 선택값 검증
+    if (choice !== 'left' && choice !== 'right') {
+      console.error('잘못된 선택값:', choice);
+      return;
+    }
+    
     // 선택 저장
     const newSelections = [...selections];
-    newSelections[questionIndex] = choice;
+    newSelections[questionIndex] = choice; // 직접 선택값 저장
     setSelections(newSelections);
+    
+    // 디버깅을 위한 로그
+    console.log('저장된 선택:', newSelections);
     
     // 다음 질문으로 이동 또는 완료
     if (questionIndex < totalSteps - 1) {
@@ -92,7 +103,7 @@ export default function Home() {
       {currentStep < totalSteps && (
         <BinaryChoice
           question={questions[currentStep]}
-          onSelect={(choice) => handleSelection(currentStep, choice)}
+          onSelect={handleSelection}  // 직접 handleSelection 함수 전달
           questionNumber={currentStep + 1}
         />
       )}
