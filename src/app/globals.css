@@ -1,21 +1,160 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* 기본 리셋 및 폰트 설정 */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* 미니멀 컬러 팔레트 - 검정, 회색, 흰색만 사용 */
+  --color-black: #000000;
+  --color-dark-gray: #333333;
+  --color-gray: #777777;
+  --color-light-gray: #DDDDDD;
+  --color-white: #FFFFFF;
+  
+  /* 폰트 사이즈 */
+  --font-small: 0.875rem;
+  --font-medium: 1rem;
+  --font-large: 1.5rem;
+  --font-xlarge: 2rem;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+html,
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  background-color: var(--color-white);
+  color: var(--color-black);
+  line-height: 1.5;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 500;
+}
+
+/* 미니멀 디자인을 위한 유틸리티 클래스 */
+.container {
+  max-width: 600px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.btn-primary {
+  background-color: var(--color-black);
+  color: var(--color-white);
+}
+
+.btn-secondary {
+  background-color: var(--color-white);
+  color: var(--color-black);
+  border: 1px solid var(--color-black);
+}
+
+.btn-outline {
+  background-color: transparent;
+  border: 1px solid var(--color-light-gray);
+}
+
+/* 이진 선택 스타일 */
+.binary-choice-container {
+  display: flex;
+  justify-content: space-between;
+  margin: 2rem 0;
+  width: 100%;
+}
+
+.choice-btn {
+  width: 48%;
+  aspect-ratio: 1/1;
+  background-color: var(--color-white);
+  border: 1px solid var(--color-light-gray);
+  transition: transform 0.2s ease;
+  overflow: hidden;
+}
+
+.choice-btn:hover {
+  transform: scale(1.02);
+}
+
+.choice-btn.selected {
+  border: 2px solid var(--color-black);
+}
+
+.choice-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* 진행 상태 바 */
+.progress-bar {
+  width: 100%;
+  height: 4px;
+  background-color: var(--color-light-gray);
+  margin: 1.5rem 0;
+}
+
+.progress-fill {
+  height: 100%;
+  background-color: var(--color-black);
+  transition: width 0.3s ease;
+}
+
+/* 입력 필드 */
+.input-container {
+  margin: 1.5rem 0;
+}
+
+.input-field {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--color-light-gray);
+  font-size: var(--font-medium);
+  background-color: var(--color-white);
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: var(--color-black);
+}
+
+/* 모바일 최적화 */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 1rem;
+  }
+  
+  .binary-choice-container {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .choice-btn {
+    width: 85%;
+    margin-bottom: 1rem;
+  }
 }
