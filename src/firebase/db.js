@@ -29,14 +29,31 @@ import {
    */
   export async function saveUserSelections(selections, socialInfo) {
     try {
+      // 디버깅을 위한 로그 추가
+      console.log('저장할 데이터:', {
+        selections,
+        socialInfo
+      });
+
+      // 데이터 유효성 검사 추가
+      if (!Array.isArray(selections) || selections.length === 0) {
+        throw new Error('유효하지 않은 선택 데이터');
+      }
+
+      if (!socialInfo || !socialInfo.handle || !socialInfo.platform) {
+        throw new Error('유효하지 않은 소셜 정보');
+      }
+
       // 사용자 데이터 객체 생성
       const userData = {
         choices: selections,
         socialHandle: socialInfo.handle,
         platform: socialInfo.platform,
-        timestamp: serverTimestamp()
+        timestamp: serverTimestamp(),
+        // 추가 디버깅 정보
+        createdAt: new Date().toISOString()
       };
-  
+
       // Firestore에 문서 추가
       const userRef = collection(db, "users");
       const docRef = await addDoc(userRef, userData);
@@ -45,6 +62,12 @@ import {
       return docRef.id;
     } catch (error) {
       console.error("사용자 데이터 저장 오류:", error);
+      // 에러 상세 정보 로깅
+      console.error("에러 상세:", {
+        code: error.code,
+        message: error.message,
+        stack: error.stack
+      });
       throw error;
     }
   }

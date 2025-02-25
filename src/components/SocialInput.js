@@ -34,8 +34,12 @@ export default function SocialInput() {
         handle: handle.trim()
       };
       
+      console.log('소셜 데이터 제출:', socialData); // 디버깅 로그 추가
+      
       // ChoiceContext를 통해 Firebase에 저장
       await submitSocialInfo(socialData);
+      
+      console.log('데이터 저장 성공'); // 성공 로그
     } catch (err) {
       console.error('제출 오류:', err);
       setError('제출 중 오류가 발생했습니다. 다시 시도해주세요.');
