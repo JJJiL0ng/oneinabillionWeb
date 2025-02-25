@@ -3,6 +3,7 @@
 
 import { useState } from 'react';
 import { useChoiceContext } from '../contexts/ChoiceContext';
+import { saveUserSelections } from '../firebase/db';
 
 /**
  * SNS 계정 입력 폼 컴포넌트
