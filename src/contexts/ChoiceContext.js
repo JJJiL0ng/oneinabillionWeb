@@ -64,6 +64,9 @@ export function ChoiceProvider({ children }) {
     
     setSelections(newSelections);
     
+    // 로컬 스토리지에 저장
+    localStorage.setItem('one-in-billion-selections', JSON.stringify(newSelections));
+    
     // 다음 질문으로 이동 또는 완료 처리
     if (questionIndex < totalSteps - 1) {
       setCurrentStep(questionIndex + 1);
@@ -84,16 +87,27 @@ export function ChoiceProvider({ children }) {
       // 소셜 정보 저장
       setSocialInfo(data);
       
+      // 선택 데이터 검증
+      if (!selections || selections.length === 0) {
+        throw new Error('선택 데이터가 없습니다');
+      }
+
+      console.log('Firebase로 전송할 데이터:', {
+        selections,
+        data
+      });
+
       // Firebase에 데이터 저장
       const userId = await saveUserSelections(selections, data);
       
       // 제출 완료 상태로 변경
       setIsCompleted(true);
+      localStorage.removeItem('one-in-billion-selections'); // 저장 성공 시 로컬 데이터 삭제
       
       return userId;  // 필요한 경우 사용할 수 있도록 userId 반환
     } catch (err) {
       console.error('소셜 정보 제출 오류:', err);
-      setError('제출 중 오류가 발생했습니다. 다시 시도해주세요.');
+      setError(err.message);
       throw err;  // 에러를 상위로 전파
     } finally {
       setIsLoading(false);
@@ -109,14 +123,8 @@ export function ChoiceProvider({ children }) {
     setSocialInfo(null);
     setIsCompleted(false);
     setError(null);
+    localStorage.removeItem('one-in-billion-selections');
   };
-
-  // 선택 데이터 변경 시 로컬 스토리지에 저장
-  useEffect(() => {
-    if (selections.length > 0) {
-      localStorage.setItem('one-in-billion-selections', JSON.stringify(selections));
-    }
-  }, [selections]);
 
   // 초기 로드 시 로컬 스토리지에서 데이터 복원
   useEffect(() => {
