@@ -138,3 +138,24 @@ export function getQuestions() {
     // 참고: 실제 구현에서는 Firebase 또는 다른 데이터베이스와 연동 필요
     return [...currentQuestions, newQuestion];
   }
+
+  
+//   questions.js 파일을 열고 질문 배열에 새로운 객체를 추가합니다:
+
+// javascriptCopyexport function getQuestions() {
+//   return [
+//     // 기존 질문들...
+//     {
+//       id: 'q6', // 새로운 고유 ID
+//       text: '새로운 질문 텍스트',
+//       leftImage: '/images/questions/q6-left.png', // 새 이미지 경로
+//       rightImage: '/images/questions/q6-right.png',
+//       leftText: '왼쪽 선택에 대한 설명',
+//       rightText: '오른쪽 선택에 대한 설명'
+//     },
+//     // 필요한 만큼 질문 추가
+//   ];
+// }
+
+// 새 질문의 이미지를 /public/images/questions/ 폴더에 추가합니다.
+// 필요한 경우 lib/matching.js의 questionTraitMap 배열을 업데이트하여 새 질문이 어떤 성향을 측정하는지 지정할 수 있습니다.

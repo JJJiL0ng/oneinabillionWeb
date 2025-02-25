@@ -1,5 +1,6 @@
 // src/app/layout.js
 import './globals.css';
+import { Analytics } from '@vercel/analytics/react';
 
 export const metadata = {
   title: 'one in a billion | 간단한 이진 질문으로 매칭해드립니다',
@@ -27,6 +28,7 @@ export default function RootLayout({ children }) {
               <p className="text-sm">© {new Date().getFullYear()} one in a billion</p>
             </div>
           </footer>
+          <Analytics />
         </main>
       </body>
     </html>
